@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %} HOME PAGE {% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/home-page.css') }}">
+
+<div class="container">
+    <div class="col-xs-12">
+        <div class="text-center" style="padding-top: 30px; padding-bottom: 30px;">
+            <img class="backdrop linktree">
+            <h2 style="color: #ffffff; padding-top: 20px;">Avi Patel</h2>
+            <span style="color: #ffffff; padding-top: 20px;">Data Scientist</span>
+
+            <br></br>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="col-xs-12">
+        <div class="text-center">
+            <div style="padding-bottom: 30px;">
+                <button onclick="location.href='{{ url_for('movie_review_sentiment')}}'" type="button"
+                        class="btn btn-outline-light shake"
+                        style="width: 80%; padding-top:10px; padding-bottom:10px; font-weight: 800;">
+                    Movie Review Sentiment Analysis
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="https://www.alphaready.co" style="color: #34312f;">--</a>
+</div>
+
+{% endblock %}
