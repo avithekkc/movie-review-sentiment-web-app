@@ -22,25 +22,26 @@ def home():
 
 @app.route('/movie_review_sentiment', methods=['GET'])
 def movie_review_sentiment():
-    return render_template('home.html')
+    return render_template('movie_review_sentiment.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
+
+    # GETTING REQUEST
     review = None
     if request.method == "POST":
         review = request.get_json('data')
 
-    # LOAD PKL FILE
+    # LOADING PKL FILE
     model_file = 'log_model.pkl'
     transforms_file = 'tfidf_transformer.pkl'
     model = pickle.load(open(model_file, 'rb'))
     transformer = pickle.load(open(transforms_file, 'rb'))
 
     data = [review]
+
     # CLEANING
-
     df = pd.DataFrame(data, columns=['review'])
-
     df.review = df.review.apply(lambda x: x.strip())
     df.review = df.review.apply(lambda x: re.sub(' +', ' ', x))
     df.review = df.review.apply(lambda x: ''.join([i for i in x if not i.isdigit()]))
@@ -52,9 +53,10 @@ def predict():
     df.review = df.review.apply(lambda x: ' '.join([w for w in x.split() if w not in STOP_WORDS]))
     df.review = df.review.apply(lambda x: " ".join([token.lemma_ for token in spacy_nlp(x)]))
 
-    ## PREDICTION
+    # PREDICTING SENTIMENT
     vector = transformer.transform(df.review).toarray()
-    proba = model.predict_proba(vector).tolist()
+    proba = model.predict_proba(vector)
+    proba = np.round(proba * 100, 0).tolist()
     prediction = model.predict(vector).tolist()
     review_prediction = {
         'predict': prediction[0],

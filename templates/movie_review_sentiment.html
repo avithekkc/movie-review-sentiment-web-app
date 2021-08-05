@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} HOME PAGE {% endblock %}
+{% block title %} Movie Review Sentiment Analysis {% endblock %}
 
 {% block content %}
 
@@ -34,7 +34,7 @@ function AnalyzeSentiment(){
           title: 'Analyzing Review...',
           width: 600,
           padding: '3em',
-          imageUrl: "static/images/popcorn2.gif",
+          imageUrl: "static/images/popcorn.gif",
           showCancelButton: false,
           showConfirmButton: false,
           backdrop: `
@@ -48,6 +48,7 @@ function AnalyzeSentiment(){
           url : "{{url_for('predict')}}",
           data: JSON.stringify(review),
           contentType: "application/json",
+          cache: false,
           dataType: 'json',
           success: function(data) {
                 cleaned_review = data['review_cleaned'][0]
@@ -55,11 +56,11 @@ function AnalyzeSentiment(){
                 probablity = data['proba']
                 confidence = probablity[predict]
                 sentiment = predict == 1 ? 'Positive' : 'Negative'
-                text = 'The Model is ' + probablity[predict].toFixed(2) * 100 + ' % confident about review being ' + sentiment
-                image = 'static/images/' + predict + '.png'
+                text = 'The Model is ' + probablity[predict] + '% Confident About The Review Being ' + sentiment
+                image = 'static/images/' + sentiment + predict + '.png'
                 Swal.fire({
                   title: text,
-                  width: 600,
+                  width: 800,
                   imageUrl: image,
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',
@@ -67,9 +68,11 @@ function AnalyzeSentiment(){
                   confirmButtonText: 'View Cleaned Review'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    Swal.fire(
-                      cleaned_review,
-                    )
+                    Swal.fire({
+                      width: 1200,
+                      title: 'Text After cleaning',
+                      text: cleaned_review,
+                    })
                   }
                 })
            }
