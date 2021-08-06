@@ -28,29 +28,35 @@ function AnalyzeSentiment(){
 
     review = $('#review').val();
     if (!review) {
-
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Empty movie review cannot be analyzed.',
+        })
     } else {
         Swal.fire({
-          title: 'Analyzing Review...',
-          width: 600,
+          text: 'Analyzing Review...',
+          width: 350,
           padding: '3em',
           imageUrl: "static/images/popcorn.gif",
           showCancelButton: false,
           showConfirmButton: false,
+          background: 'white',
           backdrop: `
             rgba(0,0,123,0.4)
             left top
             no-repeat
           `
-         })
-        $.ajax({
-          type : 'POST',
-          url : "{{url_for('predict')}}",
-          data: JSON.stringify(review),
-          contentType: "application/json",
-          cache: false,
-          dataType: 'json',
-          success: function(data) {
+        })
+        setTimeout(function(){
+            $.ajax({
+              type : 'POST',
+              url : "{{url_for('predict')}}",
+              data: JSON.stringify(review),
+              contentType: "application/json",
+              cache: false,
+              dataType: 'json',
+              success: function(data) {
                 cleaned_review = data['review_cleaned'][0]
                 predict = data['predict']
                 probablity = data['proba']
@@ -75,8 +81,9 @@ function AnalyzeSentiment(){
                     })
                   }
                 })
-           }
-        })
+              }
+            })
+        }, 1500);
     }
 }
 
