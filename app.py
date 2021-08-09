@@ -10,7 +10,7 @@ import unicodedata
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 
-spacy_nlp = spacy.load("en_core_web_lg")
+spacy_nlp = spacy.load("en_core_web_sm")
 
 app = Flask(__name__)
 
